@@ -33,6 +33,12 @@ class Server {
 
     middlewares() {
 
+        const corsOptions = {
+            origin: 'http://127.0.0.1:5500', // Reemplaza esto con el dominio de tu aplicación local
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+            credentials: true,
+            optionsSuccessStatus: 204,
+        };
         // CORS
         this.app.use(cors());
 
