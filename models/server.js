@@ -34,7 +34,7 @@ class Server {
     middlewares() {
 
         const corsOptions = {
-            origin: 'http://127.0.0.1:5500', // Reemplaza esto con el dominio de tu aplicación local
+            origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://portal-rijmjada.vercel.app/'],
             methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
             credentials: true,
             optionsSuccessStatus: 204,
