@@ -30,12 +30,12 @@ const OfertaSchema = Schema({
     },
 
     descripcion: {
-        type: String, 
+        type: String,
         required: [true, 'El campo descripcion es obligatorio']
     },
 
     salario: {
-        type: Number, 
+        type: Number,
         required: [true, 'El campo salario es obligatorio']
     },
 
@@ -48,7 +48,12 @@ const OfertaSchema = Schema({
         type: Boolean,
         default: true
     },
-    
+
+    sector: {
+        type: String,
+        required: [true, 'El campo ubicacion es obligatorio']
+    },
+
     fechaCreacion: {
         type: Date,
         default: Date.now

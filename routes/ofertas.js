@@ -36,6 +36,7 @@ router.post('/:id', [
     check('descripcion', 'El campo descripcion es obligatorio').not().isEmpty(),
     check('modalidad', 'El campo modalidad es obligatorio').not().isEmpty(),
     check('salario', 'El campo salario debe ser un número').isNumeric(),
+    check('sector', 'El campo sector es obligatorio').not().isEmpty(),
     validarCampos
 ], crearOferta);
 

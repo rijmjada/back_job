@@ -104,7 +104,7 @@ const listarOfertas = async (req, res = response) => {
 // CREAR UNA OFERTA NUEVA
 const crearOferta = async (req, res = response) => {
     try {
-        const { titulo, ubicacion, descripcion, salario, empresa, modalidad } = req.body;
+        const { titulo, ubicacion, descripcion, salario, empresa, modalidad, sector } = req.body;
         const { id } = req.params;
 
         // Primero, obtén el usuario
@@ -118,6 +118,7 @@ const crearOferta = async (req, res = response) => {
             salario,
             modalidad,
             empresa,
+            sector,
             usuario: usuario._id // Asegúrate de almacenar solo el ID del usuario, no todo el objeto
         };
 
