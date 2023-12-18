@@ -145,13 +145,65 @@ const buscarOfertaPorID = async (req, res) => {
         const oferta = await Oferta.findById(id);
 
         res.json(oferta);
-        
+
     } catch (error) {
         console.error('Error al buscar ofertas:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
+
+const ListarSectores = async (req, res) => {
+    try {
+        const ofertas = await Oferta.find({ estado: true });
+        const sectores = {};
+
+        ofertas.forEach(oferta => {
+            if (oferta.sector in sectores) {
+                sectores[oferta.sector]++;
+            } else {
+                sectores[oferta.sector] = 1;
+            }
+        });
+
+        res.json(sectores);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los sectores' });
+    }
+};
+
+
+const ListarFechas = async (req, res) => {
+    try {
+        const fechas = await Oferta.distinct("fechaCreacion", { estado: true });
+
+        res.json(fechas);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las fechas de las ofertas' });
+    }
+};
+
+const ListarModalidades = async (req, res) => {
+    try {
+        const ofertas = await Oferta.find({ estado: true });
+        const modalidades = {
+            presencial: 0,
+            remoto: 0,
+            hibrido: 0,
+        };
+
+        ofertas.forEach((oferta) => {
+            modalidades[oferta.modalidad]++;
+        });
+
+        res.json(modalidades);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las modalidades' });
+    }
+}
 
 //TODO: ACTUALIZAR OFERTA
 const actualizarOferta = (req, res = response) => {
@@ -182,10 +234,15 @@ const eliminarOferta = async (req, res = response) => {
 }
 
 
+
+
 module.exports = {
     crearOferta,
     listarOfertas,
     actualizarOferta,
     eliminarOferta,
-    buscarOfertaPorID
+    buscarOfertaPorID,
+    ListarSectores,
+    ListarFechas,
+    ListarModalidades
 }

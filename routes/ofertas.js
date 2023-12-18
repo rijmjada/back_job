@@ -7,7 +7,10 @@ const {
     listarOfertas,
     actualizarOferta,
     eliminarOferta,
-    buscarOfertaPorID
+    buscarOfertaPorID,
+    ListarSectores,
+    ListarFechas,
+    ListarModalidades
 } = require('../controllers/ofertas')
 
 const router = Router();
@@ -17,6 +20,12 @@ const router = Router();
 router.get('/', listarOfertas);
 
 
+router.get('/sectores', ListarSectores);
+
+// Endpoint para obtener ofertas por fecha
+router.get('/fechas', ListarFechas);
+
+router.get('/modalidades', ListarModalidades);
 
 
 //TODO: BUSCAR UNA OFERTA POR ID
@@ -24,6 +33,7 @@ router.get('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     validarCampos
 ], buscarOfertaPorID);
+
 
 
 // CREAR UNA OFERTA NUEVA
