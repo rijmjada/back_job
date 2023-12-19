@@ -132,14 +132,14 @@ const crearOferta = async (req, res = response) => {
             usuario: usuario._id // Asegúrate de almacenar solo el ID del usuario, no todo el objeto
         };
 
-        // const oferta = new Oferta(objOferta);
-        // usuario.ofertasPublicadas.push(oferta._id);
-        // await oferta.save();
-        // await usuario.save();
+        const oferta = new Oferta(objOferta);
+        usuario.ofertasPublicadas.push(oferta._id);
+        await oferta.save();
+        await usuario.save();
 
         res.json({
             msg: 'POST - crearOferta',
-            objOferta
+            usuario
         });
     } catch (error) {
         res.status(401).json(error);
