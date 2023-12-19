@@ -60,7 +60,7 @@ const buscarOfertasPorPalabrasClave = async (palabrasClave) => {
 
 const listarOfertas = async (req, res = response) => {
     try {
-        const { limite = 10, desde = 0, termino, modalidad } = req.query;
+        const { limite = 100, desde = 0, termino, modalidad, sector } = req.query;
         let query = { estado: true };
 
         let ofertas = [];
@@ -68,6 +68,15 @@ const listarOfertas = async (req, res = response) => {
         if (modalidad) {
             query.modalidad = modalidad;
         }
+
+        if (sector) {
+            ofertas = await Oferta.find({ sector: { $regex: sector, $options: 'i' } });
+            return res.json({
+                total: ofertas.length,
+                ofertas,
+            });
+        }
+        
 
         if (termino) {
             // Realizar búsqueda por palabras clave

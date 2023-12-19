@@ -22,6 +22,8 @@ router.get('/', listarOfertas);
 
 router.get('/sectores', ListarSectores);
 
+
+
 // Endpoint para obtener ofertas por fecha
 router.get('/fechas', ListarFechas);
 
@@ -46,6 +48,7 @@ router.post('/:id', [
     check('descripcion', 'El campo descripcion es obligatorio').not().isEmpty(),
     check('modalidad', 'El campo modalidad es obligatorio').not().isEmpty(),
     check('salario', 'El campo salario debe ser un número').isNumeric(),
+    check('jornada', 'El campo jornada es obligatorio').not().isEmpty(),
     check('sector', 'El campo sector es obligatorio').not().isEmpty(),
     validarCampos
 ], crearOferta);

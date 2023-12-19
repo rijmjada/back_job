@@ -54,6 +54,11 @@ const OfertaSchema = Schema({
         required: [true, 'El campo ubicacion es obligatorio']
     },
 
+    jornada: {
+        type: String,
+        required: [true, 'El campo jornada es obligatorio']
+    },
+
     fechaCreacion: {
         type: Date,
         default: Date.now
