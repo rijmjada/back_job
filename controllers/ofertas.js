@@ -113,7 +113,7 @@ const listarOfertas = async (req, res = response) => {
 // CREAR UNA OFERTA NUEVA
 const crearOferta = async (req, res = response) => {
     try {
-        const { titulo, ubicacion, descripcion, salario, empresa, modalidad, sector } = req.body;
+        const { titulo, ubicacion, descripcion, salario, empresa, modalidad, sector, jornada } = req.body;
         const { id } = req.params;
 
         // Primero, obtén el usuario
@@ -128,17 +128,18 @@ const crearOferta = async (req, res = response) => {
             modalidad,
             empresa,
             sector,
+            jornada,
             usuario: usuario._id // Asegúrate de almacenar solo el ID del usuario, no todo el objeto
         };
 
-        const oferta = new Oferta(objOferta);
-        usuario.ofertasPublicadas.push(oferta._id);
-        await oferta.save();
-        await usuario.save();
+        // const oferta = new Oferta(objOferta);
+        // usuario.ofertasPublicadas.push(oferta._id);
+        // await oferta.save();
+        // await usuario.save();
 
         res.json({
             msg: 'POST - crearOferta',
-            usuario
+            objOferta
         });
     } catch (error) {
         res.status(401).json(error);
