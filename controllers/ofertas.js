@@ -126,8 +126,8 @@ const crearOferta = async (req, res = response) => {
             descripcion,
             salario,
             modalidad,
-            empresa,
             sector,
+            empresa,
             jornada,
             usuario: usuario._id // Asegúrate de almacenar solo el ID del usuario, no todo el objeto
         };
