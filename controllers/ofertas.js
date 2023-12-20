@@ -8,7 +8,7 @@ const Usuario = require("../models/usuario");
 
 const listarOfertas = async (req, res) => {
     try {
-        const { limite = 5, desde = 0, termino, modalidad, sector, jornada } = req.query;
+        const { limite = 15, desde = 0, termino, modalidad, sector, jornada } = req.query;
         let query = { estado: true };
 
         let ofertas = [];
