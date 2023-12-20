@@ -8,13 +8,13 @@ const Usuario = require("../models/usuario");
 
 const listarOfertas = async (req, res) => {
     try {
-        const { limite = 12, desde = 0, termino, modalidad, sector, jornada } = req.query;
+        const { limite = 50, desde = 0, termino, modalidad, sector, jornada } = req.query;
         let query = { estado: true };
 
         let ofertas = [];
 
         if (modalidad) return await listarOfertasPorModalidad(res, modalidad, desde, limite);
-        if (sector) return await listarOfertasPorSector(res, modalidad, desde, limite);
+        if (sector) return await listarOfertasPorSector(res, sector, desde, limite);
         if (jornada) return await listaOfertasPorTipoDeJornada(res, modalidad, desde, limite);
         if (termino) ofertas = await listarOfertasPorPalabrasClave(termino.toLowerCase(), desde, limite);
         else ofertas = await Oferta.find(query).skip(Number(desde)).limit(Number(limite));
