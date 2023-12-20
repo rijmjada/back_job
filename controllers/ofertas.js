@@ -4,37 +4,81 @@ const Oferta = require('../models/oferta');
 const Usuario = require("../models/usuario");
 
 
-// LISTAR OFERTAS
-// const listarOfertas = async (req, res = response) => {
-//     try {
-//         const { limite = 10, desde = 0, modalidad } = req.query;
-//         let query = { estado: true };
 
-//         // Agregar el filtro por modalidad si se proporciona en los parámetros de consulta
-//         if (modalidad) {
-//             query.modalidad = modalidad;
-//         }
 
-//         const [total, ofertas] = await Promise.all([
-//             Oferta.countDocuments(query),
-//             Oferta.find(query)
-//                 .skip(Number(desde))
-//                 .limit(Number(limite))
-//         ]);
-
-//         res.json({
-//             total,
-//             ofertas
-//         });
-//     } catch (error) {
-//         console.error('Error al listar ofertas:', error);
-//         res.status(500).json({ error: 'Error interno del servidor' });
-//     }
-// };
-
-const buscarOfertasPorPalabrasClave = async (palabrasClave) => {
+const listarOfertas = async (req, res) => {
     try {
-        const regexPalabrasClave = palabrasClave
+        const { limite = 5, desde = 0, termino, modalidad, sector, jornada } = req.query;
+        let query = { estado: true };
+
+        let ofertas = [];
+
+        if (modalidad) return await listarOfertasPorModalidad(res, modalidad, desde, limite);
+        if (sector) return await listarOfertasPorSector(res, modalidad, desde, limite);
+        if (jornada) return await listaOfertasPorTipoDeJornada(res, modalidad, desde, limite);
+        if (termino) ofertas = await listarOfertasPorPalabrasClave(termino.toLowerCase(), desde, limite);
+        else ofertas = await Oferta.find(query).skip(Number(desde)).limit(Number(limite));
+
+        res.json({
+            total: ofertas.length,
+            ofertas,
+        });
+    } catch (error) {
+        manejarError(res, 'Error al listar ofertas:');
+    }
+};
+
+const manejarError = (res, mensaje) => {
+    console.error(mensaje);
+    res.status(500).json({ error: 'Error interno del servidor' });
+};
+
+const listarOfertasPorModalidad = async (res, modalidad, desde, limite) => {
+    try {
+        const ofertas = await Oferta.find({ modalidad: { $regex: modalidad, $options: 'i' } })
+            .skip(Number(desde))
+            .limit(Number(limite));
+        res.json({
+            total: ofertas.length,
+            ofertas,
+        });
+    } catch (error) {
+        manejarError(res, 'Error al listar ofertas por modalidad:');
+    }
+};
+
+const listaOfertasPorTipoDeJornada = async (res, jornada, desde, limite) => {
+    try {
+        const ofertas = await Oferta.find({ jornada: { $regex: jornada, $options: 'i' } })
+            .skip(Number(desde))
+            .limit(Number(limite));
+        res.json({
+            total: ofertas.length,
+            ofertas,
+        });
+    } catch (error) {
+        manejarError(res, 'Error al listar ofertas por jornada:');
+
+    }
+}
+
+const listarOfertasPorSector = async (res, sector, desde, limite) => {
+    try {
+        const ofertas = await Oferta.find({ sector: { $regex: sector, $options: 'i' } })
+            .skip(Number(desde))
+            .limit(Number(limite));
+        res.json({
+            total: ofertas.length,
+            ofertas,
+        });
+    } catch (error) {
+        manejarError(res, 'Error al listar ofertas por sector:');
+    }
+};
+
+const listarOfertasPorPalabrasClave = async (termino, desde, limite) => {
+    try {
+        const regexPalabrasClave = termino
             .toLowerCase()
             .split(' ')
             .map(keyword => new RegExp(keyword, 'i'));
@@ -49,7 +93,8 @@ const buscarOfertasPorPalabrasClave = async (palabrasClave) => {
 
             ],
             estado: true,
-        });
+        }).skip(Number(desde)).limit(Number(limite));
+
 
         return ofertas;
     } catch (error) {
@@ -58,55 +103,8 @@ const buscarOfertasPorPalabrasClave = async (palabrasClave) => {
     }
 };
 
-const listarOfertas = async (req, res = response) => {
-    try {
-        const { limite = 100, desde = 0, termino, modalidad, sector } = req.query;
-        let query = { estado: true };
 
-        let ofertas = [];
 
-        if (modalidad) {
-            query.modalidad = modalidad;
-        }
-
-        if (sector) {
-            ofertas = await Oferta.find({ sector: { $regex: sector, $options: 'i' } });
-            return res.json({
-                total: ofertas.length,
-                ofertas,
-            });
-        }
-        
-
-        if (termino) {
-            // Realizar búsqueda por palabras clave
-            ofertas = await buscarOfertasPorPalabrasClave(termino.toLowerCase());
-        } else {
-            // Obtener todas las ofertas si no se proporcionan palabras clave
-            ofertas = await Oferta.find(query)
-                .skip(Number(desde))
-                .limit(Number(limite));
-        }
-
-        res.json({
-            total: ofertas.length,
-            ofertas,
-        });
-    } catch (error) {
-        console.error('Error al listar ofertas:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-};
-
-// Ejemplo de uso de la función listarOfertas con palabras clave:
-// /api/ofertas?palabrasClave=remoto Nike New York
-// /api/ofertas?modalidad=remoto
-// /api/ofertas  (sin parámetros)
-
-// Ejemplo de uso de la función listarOfertas con palabras clave:
-// /api/ofertas?palabrasClave=remoto Nike New York
-// /api/ofertas?modalidad=remoto
-// /api/ofertas  (sin parámetros)
 
 
 
