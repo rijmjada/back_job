@@ -10,7 +10,8 @@ const {
     buscarOfertaPorID,
     ListarSectores,
     ListarFechas,
-    ListarModalidades
+    ListarModalidades,
+    listaOfertasPorTipoDeJornada
 } = require('../controllers/ofertas')
 
 const router = Router();
@@ -19,15 +20,15 @@ const router = Router();
 // LISTA TODAS LAS OFERTAS
 router.get('/', listarOfertas);
 
-
 router.get('/sectores', ListarSectores);
-
-
 
 // Endpoint para obtener ofertas por fecha
 router.get('/fechas', ListarFechas);
 
 router.get('/modalidades', ListarModalidades);
+
+router.get('/jornadas', listaOfertasPorTipoDeJornada);
+
 
 
 //TODO: BUSCAR UNA OFERTA POR ID

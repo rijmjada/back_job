@@ -107,7 +107,6 @@ const listarOfertasPorPalabrasClave = async (termino, desde, limite) => {
 
 
 
-
 // CREAR UNA OFERTA NUEVA
 const crearOferta = async (req, res = response) => {
     try {
@@ -213,6 +212,27 @@ const ListarModalidades = async (req, res) => {
     }
 }
 
+const ListarJornadas = async (req, res) => {
+    try {
+        const ofertas = await Oferta.find({ estado: true });
+        const jornadas = {
+            presencial: 0,
+            remoto: 0,
+            hibrido: 0,
+        };
+
+        ofertas.forEach((oferta) => {
+            modalidades[oferta.modalidad]++;
+        });
+
+        res.json(modalidades);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las modalidades' });
+    }
+}
+
+
 //TODO: ACTUALIZAR OFERTA
 const actualizarOferta = (req, res = response) => {
     res.json({
@@ -252,5 +272,6 @@ module.exports = {
     buscarOfertaPorID,
     ListarSectores,
     ListarFechas,
-    ListarModalidades
+    ListarModalidades,
+    listaOfertasPorTipoDeJornada
 }
